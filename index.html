@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LULUA | Elegance, thoughtfully designed</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">LULUA</div>
+
+        <button id="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false">
+            ☰
+        </button>
+
+        <nav>
+            <a href="#">Home</a>
+            <a href="#shop">Shop</a>
+            <a href="#collections">Collections</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="header-icons">
+            <button id="search-toggle" aria-label="Search">⌕</button>
+            <button 
+                aria-label="Shopping cart"
+                onclick="window.location.href='cart.html'">
+
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                    <path d="M5 8h14l1 13H4L5 8Z"/>
+                    <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="search-panel" id="search-panel" hidden>
+        <input
+            type="search"
+            id="product-search"
+            placeholder="Kërko produkte..."
+            autocomplete="off"
+        >
+        <button id="search-close" aria-label="Close search">×</button>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="subtitle">MODEST FASHION • LULUA ATELIER</p>
+
+            <h1>Elegance,<br>thoughtfully designed.</h1>
+
+            <p>
+                Discover timeless pieces designed with elegance,
+                comfort and individuality in mind.
+            </p>
+
+            <a href="#shop" class="main-button">EXPLORE COLLECTION</a>
+        </div>
+    </section>
+
+    <!-- COLLECTIONS -->
+    <section class="collections" id="collections">
+        <p class="subtitle">DISCOVER LULUA</p>
+        <h2>Our Collections</h2>
+
+        <div class="collection-container">
+
+            <div class="collection-card abayas-card">
+                <h3>Abayas</h3>
+                <a href="#shop" data-category="abayas">Explore</a>
+            </div>
+
+            <div class="collection-card dresses-card">
+                <h3>Dresses</h3>
+                <a href="#shop" data-category="dresses">Explore</a>
+            </div>
+
+            <div class="collection-card sets-card">
+                <h3>Sets</h3>
+                <a href="#shop" data-category="sets">Explore</a>
+            </div>
+
+        </div>
+
+        <!-- VIEW ALL COLLECTIONS -->
+        <a href="#shop" class="view-all-button" id="view-all-collections">
+            VIEW ALL COLLECTIONS
+        </a>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products" id="shop">
+        <p class="subtitle">CURATED FOR YOU</p>
+        <h2>Discover Our Pieces</h2>
+
+        <!-- PRODUCT FILTERS -->
+        <div class="product-controls">
+
+            <div class="product-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="abayas">Abayas</button>
+                <button class="filter-btn" data-filter="dresses">Dresses</button>
+                <button class="filter-btn" data-filter="sets">Sets</button>
+            </div>
+
+            <select id="product-sort">
+                <option value="newest">Newest</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+            </select>
+        </div>
+
+        <div id="product-container">
+            <!-- Products will be loaded from the database -->
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="about-image">
+            <img src="images/about.jpg" alt="LULUA modest fashion editorial">
+        </div>
+
+        <div class="about-content">
+            <p class="subtitle">THE STORY OF LULUA</p>
+
+            <h2>Designed with purpose.<br>Made with elegance.</h2>
+
+            <p>
+                Every LULUA piece is thoughtfully designed
+                and created to celebrate timeless modest fashion.
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <h2>LULUA</h2>
+        <p>Elegance, thoughtfully designed.</p>
+        <a href="https://www.instagram.com/lulua.alb/" target="_blank">
+            Instagram
+        </a>
+        <p>© 2026 LULUA. All rights reserved.</p>
+    </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

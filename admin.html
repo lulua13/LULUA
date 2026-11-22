@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LULUA | Admin Panel</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #F8F5F0;
+            --gold: #B89A5D;
+            --charcoal: #1E1E1E;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            min-height: 100vh;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+            display: none;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--charcoal);
+            color: white;
+            padding: 35px 25px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            align-self: flex-start;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            letter-spacing: 5px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--gold);
+        }
+
+        .sidebar-menu {
+            margin-top: 65px;
+        }
+
+        .sidebar-menu p {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 15px;
+            margin-bottom: 8px;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 5px;
+        }
+
+        .menu-item.active,
+        .menu-item:hover {
+            background: var(--gold);
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 45px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 45px;
+        }
+
+        .topbar h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px;
+            font-weight: 500;
+        }
+
+        .admin-label {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .welcome {
+            background: white;
+            padding: 35px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px;
+            font-weight: 500;
+        }
+
+        .gold-line {
+            width: 35px;
+            height: 2px;
+            background: var(--gold);
+            margin-top: 15px;
+        }
+
+        @media (max-width: 750px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .sidebar-menu {
+                margin-top: 30px;
+            }
+
+            .main-content {
+                padding: 25px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        #login-section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: var(--cream);
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 45px;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }   
+
+        .login-box h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 42px;
+            letter-spacing: 6px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+        }
+
+        .login-box h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .login-description {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .login-box label {
+            display: block;
+            font-size: 11px;
+            margin: 18px 0 8px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .login-box input:focus {
+            border-color: var(--gold);
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            border: none;
+            background: var(--gold);
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        #login-error {
+            color: #b00020;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+        .products-section {
+            margin-top: 45px;
+        }
+
+        .section-heading {
+            margin-bottom: 25px;
+        }
+
+        .section-heading h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+        }
+
+        .section-heading p {
+            color: #777;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .product-form-card,
+        .product-list {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .product-form-card h3,
+        .product-list h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 9px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            background: white;
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .add-product-btn {
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .add-product-btn:hover {
+            background: var(--charcoal);
+        }
+
+        #product-message {
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .admin-delete-btn {
+            background: #8b3a3a;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            margin-top: 12px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+
+        .admin-delete-btn:hover {
+            background: #652727;
+        }
+
+        .admin-edit-btn {
+            background: #B89A5D;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            margin-top: 12px;
+            margin-right: 8px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+
+        .admin-edit-btn:hover {
+            background: #967b47;
+        }
+
+        /* ADMIN PRODUCT IMAGE SIZE */
+        .admin-product-image {
+            width: 110px;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            border-radius: 5px;
+        }
+
+        /* LULUA -SETTINGS DESIGN */
+        .settings-card {
+            background: #FFFFFF;
+            padding: 35px;
+            border-radius: 10px;
+            max-width: 850px;
+            box-shadow: 0 5px 25px rgba(30, 30, 30, 0.04);
+        }
+        
+        .settings-intro {
+            margin-bottom: 30px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid #eee9e1;
+        }
+
+        .settings-intro h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 27px;
+            font-weight: 500;
+            margin-bottom: 7px;
+        }
+
+        .settings-intro p {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .settings-field {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .settings-field.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .settings-field label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .settings-field input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e5e0d8;
+            border-radius: 4px;
+            background: #FDFCFA;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .settings-field input:focus {
+            border-color: #B89A5D;
+            background: #FFFFFF;
+        }
+
+        .settings-save-btn {
+            margin-top: 28px;
+            padding: 15px 30px;
+            background: #1E1E1E;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .settings-save-btn:hover {
+            background: #B89A5D;
+        }
+
+        #settings-message {
+            margin-top: 16px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .settings-card {
+                padding: 22px;
+            }
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            .settings-field.full-width {
+                grid-column: auto;
+            }
+        }
+
+        #product-image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            width: 115px;
+        }
+
+        .image-preview-item img {
+            width: 115px;
+            height: 145px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .main-image-label {
+            display: block;
+            background: #B89A5D;
+            color: white;
+            padding: 6px;
+            font-size: 10px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .remove-image-btn {
+            width: 100%;
+            padding: 7px;
+            margin-top: 5px;
+            background: #8b3a3a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<div id="login-section">
+    <div class="login-box">
+        <h1>LULUA</h1>
+        <p class="login-subtitle">ADMINISTRATION</p>
+
+        <h2>Welcome Back</h2>
+        <p class="login-description">
+            Sign in to manage your boutique.
+        </p>
+
+        <form id="login-form">
+            <label>Email Address</label>
+            <input
+                type="email"
+                id="admin-email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Password</label>
+            <input
+                type="password"
+                id="admin-password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit">Sign In</button>
+
+            <p id="login-error"></p>
+        </form>
+    </div>
+</div>
+
+<div class="admin-layout">
+
+    <aside class="sidebar">
+
+        <div class="logo">LULUA</div>
+        <div class="subtitle">ADMINISTRATION</div>
+
+        <nav class="sidebar-menu">
+            <p>MENU</p>
+
+            <a href="#" class="menu-item active">Dashboard</a>
+            <a href="#products" class="menu-item">Products</a>
+            <a href="#orders" class="menu-item">Orders</a>
+            <a href="#customers" class="menu-item">Customers</a>
+            <a href="#settings" class="menu-item">Settings</a>
+        </nav>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <h1>Dashboard</h1>
+            <span class="admin-label">LULUA Admin Panel</span>
+        </div>
+
+        <section class="welcome">
+            <h2>Welcome to LULUA</h2>
+            <p>
+                Manage your boutique, products and orders
+                from one elegant space.
+            </p>
+        </section>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <p>Total Products</p>
+                <h3 id="total-products">0</h3>
+                <div class="gold-line"></div>
+            </div>
+
+            <div class="stat-card">
+                <p>Total Orders</p>
+                <h3 id="total-orders">0</h3>
+                <div class="gold-line"></div>
+            </div>
+
+            <div class="stat-card">
+                <p>Total Revenue</p>
+                <h3 id="total-revenue">0</h3>
+                <div class="gold-line"></div>
+            </div>
+
+            <div class="stat-card">
+                <p>Low Stock Products</p>
+                <h3 id="low-stock-products">0</h3>
+                <div class="gold-line"></div>
+            </div>
+        </section>
+        
+        <section class="products-section" id="products">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Manage Products</h2>
+                    <p>Add and manage your LULUA collection.</p>
+                </div>
+            </div>
+
+            <div class="product-form-card">
+
+                <h3>Add New Product</h3>
+
+                <form id="product-form">
+                    
+                    <input type="hidden" id="edit-product-id">
+                    
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" id="product-name"
+                                placeholder="Enter product name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="product-description"
+                                placeholder="Describe your product"></textarea>
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label>Price (ALL)</label>
+                            <input type="number" id="product-price"
+                                min="0" step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="product-category" required>
+                                <option value="">Choose category</option>
+                                <option value="Abayas">Abayas</option>
+                                <option value="Dresses">Dresses</option>
+                                <option value="Sets">Sets</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sizes</label>
+                        <input type="text" id="product-sizes"
+                            placeholder="Example: S, M, L, XL">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Colors</label>
+                        <input type="text" id="product-colors"
+                            placeholder="Example: Black, Beige, Brown">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Stock Quantity</label>
+                        <input type="number" id="product-stock"
+                            min="0" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Product Images</label>
+                        <input type="file" id="product-image"
+                            accept="image/*">
+                        <small style="color: #777;">
+                            Add photos one by one. Maximum 5MB per photo.
+                            The first photo will be the main product image.
+                        </small>
+                        <div id="product-image-preview"></div>
+                    </div>
+
+                    <button type="submit" class="add-product-btn" id="product-submit-btn">
+                        Add Product
+                    </button>
+
+                    <button type="button" id="cancel-edit-btn" style="display:none;">
+                        Cancel Edit
+                    </button>
+
+                    <p id="product-message"></p>
+
+                </form>
+
+            </div>
+
+            <div class="product-list">
+                <h3>Your Products</h3>
+                <div id="admin-product-list"></div>
+            </div>
+
+        </section>
+
+        <section class="products-section" id="orders">
+            <div class="section-heading">
+                <div>
+                    <h2>Manage Orders</h2>
+                    <p>View and manage customer orders.</p>
+                </div>
+            </div>
+
+            <div class="product-list">
+                <h3>Customer Orders</h3>
+                <div id="admin-orders-list">
+                    Loading orders...
+                </div>
+            </div>
+        </section>
+
+        <section class="products-section" id="customers">
+            <div class="section-heading">
+                <div>
+                    <h2>Manage Customers</h2>
+                    <p>View your registered customers and their orders.</p>
+                </div>
+            </div>
+            <div class="product-list">
+                <h3>Customer List</h3>
+                <div id="admin-customers-list">
+                    Loading customers...
+                </div>
+            </div>
+        </section>
+
+        <section class="products-section" id="settings">
+            <div class="section-heading">
+                <div>
+                    <h2>Store Settings</h2>
+                    <p>Manage your LULUA store information.</p>
+                </div>
+            </div>
+            
+            <div class="settings-card">
+                <div class="settings-intro">
+                    <h3>Store Information</h3>
+                    <p>Keep your boutique information up to date.</p>
+                </div>
+                <form id="store-settings-form">
+                    <div class="settings-grid">
+                        <div class="settings-field full-width">
+                            <label for="store-name">STORE NAME</label>
+                            <input type="text" id="store-name" placeholder="LULUA" required>
+                        </div>
+                        <div class="settings-field">
+                            <label for="store-email">CONTACT EMAIL</label>
+                            <input type="email" id="store-email" placeholder="hello@lulua.com">
+                        </div>
+                        <div class="settings-field">
+                            <label for="store-phone">PHONE NUMBER</label>
+                            <input type="text" id="store-phone" placeholder="+355 ...">
+                        </div>
+                        <div class="settings-field">
+                            <label for="store-instagram">INSTAGRAM</label>
+                            <input type="text" id="store-instagram" placeholder="@lulua">
+                        </div>
+                        <div class="settings-field">
+                            <label for="store-address">STORE ADDRESS</label>
+                            <input type="text" id="store-address" placeholder="Tirana, Albania">
+                        </div>
+                    </div>
+                    <button type="submit" class="settings-save-btn">
+                        SAVE CHANGES
+                    </button>
+                </form>
+                <p id="settings-message"></p>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin.js"></script>
+</body>
+</html>

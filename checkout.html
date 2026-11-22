@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porosia | LULUA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="product-header">
+        <a href="cart.html" class="back-link">← Kthehu te shporta</a>
+        <a href="index.html" class="product-logo">LULUA</a>
+    </header>
+
+    <main class="checkout-page">
+
+        <h1>Finalizo porosinë</h1>
+
+        <form id="checkout-form">
+
+            <section class="checkout-section">
+                <h2>Të dhënat e klientes</h2>
+
+                <label for="customer-name">Emri</label>
+                <input type="text" id="customer-name" required>
+
+                <label for="customer-surname">Mbiemri</label>
+                <input type="text" id="customer-surname" required>
+
+                <label for="customer-phone">Numri i telefonit</label>
+                <input type="tel" id="customer-phone" required>
+
+                <label for="customer-country">Shteti</label>
+                <select id="customer-country" required>
+                    <option value="">Zgjidh shtetin</option>
+                    <option value="Albania">🇦🇱 Shqipëri</option>
+                    <option value="Kosovo">🇽🇰 Kosovë</option>
+                </select>
+
+                <label for="customer-city">Qyteti</label>
+                <div class="city-select-wrapper">
+                    <input
+                        type="text"
+                        id="customer-city"
+                        placeholder="Zgjidh ose kërko qytetin"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <div id="city-options" class="city-options"></div>
+                </div>
+
+                <label for="customer-address">Adresa e plotë</label>
+                <textarea
+                    id="customer-address"
+                    placeholder="Rruga, numri i banesës..."
+                    required
+                ></textarea>
+
+                <label for="customer-notes">Shënime (opsionale)</label>
+                <textarea
+                    id="customer-notes"
+                    placeholder="Shënime për porosinë..."
+                ></textarea>
+            </section>
+
+            <section class="checkout-section">
+                <h2>Mënyra e pagesës</h2>
+
+                <div class="payment-option">
+                    <input
+                        type="radio"
+                        id="cash-payment"
+                        name="payment-method"
+                        value="cash_on_delivery"
+                        checked
+                    >
+                    <label for="cash-payment">
+                        Pagesë në dorëzim
+                    </label>
+                </div>
+            </section>
+
+            <section class="checkout-section">
+                <h2>Përmbledhja e porosisë</h2>
+
+                <div id="checkout-summary">
+                    Porosia po ngarkohet...
+                </div>
+
+                <p id="exchange-rate-info"></p>
+            </section>
+
+            <button type="submit" id="place-order-btn">
+                Konfirmo porosinë
+            </button>
+
+            <p id="checkout-message"></p>
+
+        </form>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="checkout.js"></script>
+
+</body>
+</html>
